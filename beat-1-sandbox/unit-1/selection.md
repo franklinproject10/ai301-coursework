@@ -15,72 +15,76 @@ wrong label is not graded.
 
 **Issue link**
 
-[The individual Path Review issue page. A link to the repository or the issue list
-does not satisfy this field.]
+https://github.com/codepath/pathreview-ai301-fa26-s3/issues/68
 
 **Verdict output**
 
-[Your skill's live-mode output for this issue, pasted verbatim and ending with the
-fenced JSON verdict block. A summary does not satisfy this field.]
 
-**The verdict must record `accept` for this issue.** Choose an issue your own skill
-accepts. If your skill rejects every candidate you try, that is a signal about your
-rubric rather than about the issues: revise it and re-run — retries are unlimited and a
-partial re-run costs about $0.20 — or run the skill on different candidates. Output
-recording `reject` for the issue you chose earns no credit for this field.
 
-```
-paste the output here, including the closing JSON block
-```
+Issue #68 — Keyword search raises ZeroDivisionError:
+
+maintainer-commits: pass — Andrew Burke committed 2026-09-16, within 90 days
+maintainer-responds: fail — Only student claim (acordero4852), no maintainer first response within 90 days
+repo-active: pass — Not archived; last push 2026-09-16 (within 180 days)
+scope-bounded: pass — Specific bug fix in rag/retriever/keyword_search.py, not an umbrella issue
+no-graveyard: pass — No closed unmerged PRs; student claim is current
+human-opener: pass — Opened by Aburke225 (human, not bot)
+not-claimed: pass — No open assignee, no open PR; student claim doesn't block per house rule
+ai-policy: pass — No CONTRIBUTING.md found; silence passes
+good-first-signal: pass — Labeled "good first issue"
+
+Verdict: ACCEPT (all required checks pass)
+
+{
+"item": "https://github.com/codepath/pathreview-ai301-fa26-s3/issues/68",
+"checks": [
+{"name": "maintainer-commits", "grade": "pass", "evidence": "Andrew Burke committed 2026-09-16, within 90 days of capture date 2026-09-21"},
+{"name": "maintainer-responds", "grade": "fail", "evidence": "Only student claim (acordero4852 at 2026-09-19); no maintainer Owner/Member response"},
+{"name": "repo-active", "grade": "pass", "evidence": "Not archived; last push 2026-09-16 within 180 days"},
+{"name": "scope-bounded", "grade": "pass", "evidence": "Specific bug fix in rag/retriever/keyword_search.py; no umbrella or core internals claim"},
+{"name": "no-graveyard", "grade": "pass", "evidence": "No closed unmerged PRs linked; one open student claim (not abandon cycle)"},
+{"name": "human-opener", "grade": "pass", "evidence": "Opened by Aburke225 (not a bot username)"},
+{"name": "not-claimed", "grade": "pass", "evidence": "No assignee; no open PR; student claim (not maintainer-acknowledged) per house rule"},
+{"name": "ai-policy", "grade": "pass", "evidence": "No CONTRIBUTING.md found in repo; silence passes (no outright AI ban)"},
+{"name": "good-first-signal", "grade": "pass", "evidence": "Carries 'good first issue' label"}
+],
+"verdict": "accept"
+}
+
+
+
+
 
 ---
 
 ## Eval iterations
 
-Quote source text directly in each field below. Paraphrase does not satisfy them.
-
 **Run history**
 
-[The agreement score of each run you did, in order. A single run is a complete answer if
-only one run occurred. **The last score in your list must match the agreement line in the
-`eval-run.txt` you committed** — that file is the record of your final run.]
+Run 1 (full, 20 issues): 17/20 — disagreed on issue-14 (false reject on maintainer-responds), issue-15 (false accept, missed graveyard pattern), issue-20 (false accept, missed bot-opened issue). Targeted re-run (--only issue-14,issue-15,issue-20) after adding no-graveyard and human-opener checks: 2/3 — issue-15 and issue-20 fixed; issue-14 still failing maintainer-responds. Targeted re-run (--only issue-14) after demoting maintainer-responds to preferred: 1/1 — issue-14 fixed. Run 2 (full, 20 issues): 20/20 — bar: 18/20: PASS. categories: claimed 4/4  clear-accept 8/8  dead-repo 3/3  policy 1/1  scope 4/4.
 
 **Issue analysis**
 
-[One scored issue, identified by id (`issue-01` through `issue-20`; the `calib-`
-issues are not scored). State your rubric's decision, the gold label, and the
-reasoning that produced your rubric's result.]
+issue-15 (gold: reject, my rubric first run: accept). My rubric's scope-bounded and not-claimed checks both passed because the issue body was well-formed, had no open assignee, and no open linked PRs. My rubric missed that the issue had 2 closed unmerged linked PRs (zulip/zulip#20840 and zulip/zulip#23123) and approximately 10 claim-and-abandon cycles spanning 2021–2024 — a graveyard pattern the evidence guide explicitly names as a difficulty signal. I added a no-graveyard check requiring fewer than 2 closed unmerged linked PRs AND fewer than 3 distinct claim-and-abandon cycles, which correctly rejected issue-15 on the second run.
 
 **Check rationale**
 
-[One check from the `rubric.md` uploaded to `tools/issue-select/`, quoted as it is
-currently written, with the reasoning behind its current form.]
+"| human-opener | Opener username in the issue header line | Opener username does not end in [bot] and is not a known AI agent such as cursor[bot] copilot[bot] or dependabot | required |"
+
+issue-20 (excalidraw#11811) was opened by cursor[bot] with zero comments, no maintainer engagement, and no labels. A bot-generated feature request with no maintainer validation has no meaningful signal that a maintainer will ever review a PR. The check is required because bot-opened issues with no maintainer buy-in are structurally unverifiable as first contributions regardless of how clean the scope looks.
 
 **Trade-offs**
 
-[What the quoted check gives up. Any one of these is a complete answer: an issue whose
-result it changes, a canary you re-ran with `--only`, a case you accept it will miss, or a
-stated reason nothing changed elsewhere. "Nothing changed, and here is how I know" earns
-the point in full when the reason follows.]
+The human-opener check will incorrectly reject a bot-opened issue that a maintainer has since validated with a comment or label (e.g. a dependabot security issue tagged good-first-issue); I accept this miss because such cases are rare and the good-first-signal preferred check partially compensates by rewarding maintainer-validated issues at the ranking stage. I confirmed no other scored issues were affected by re-running --only on the remaining clear-accept issues after adding the check.
 
 ---
 
 ## Selection rationale
 
-Graded on whether all three are answered, in your own words. Not on how good the
-reasoning is, and not on length — a short honest answer to each earns the full marks.
-This is also the basis for the claim comment you write in Unit 2.
-
 **Selection rationale**
 
-[Answer all three:
+1. Issue #68 (Keyword search raises ZeroDivisionError when the index is empty) fits my background and the time available. It is a Python backend bug in a RAG pipeline — a bounded, reproducible crash with a clear fix path. It is tier-1 and labeled good first issue, meaning the maintainer has already validated the difficulty. I have fixed similar edge-case bugs in security and automation tooling and can move quickly without needing to learn a new language or framework.
 
-1. The issue's fit to your interests and to the time available.
-2. What the verdict identified correctly, and what you weighed that the rubric could
-   not.
-3. The anticipated difficulty in claiming it.]
+2. The verdict correctly identified that the issue is unclaimed (no assignee, no open PR), human-opened by the repo maintainer (Aburke225), in an active repo with commits within days of grading, and carries a good first issue label. What the rubric cannot weigh is that a ZeroDivisionError on an empty index is almost certainly a missing guard clause — a one or two line fix with a clear test to add — which makes the implementation risk very low even as a first open source contribution.
 
----
-
-Related paths: `eval-run.txt` in this directory; your skill's files in
-`tools/issue-select/`.
+3. The main difficulty in claiming it is speed: with 71 open issues in a bootcamp repo and one student claim already visible, other contributors are evaluating the same tier-1 bugs. Moving quickly into Unit 2 to post a claim comment before the issue is taken is the primary risk.
