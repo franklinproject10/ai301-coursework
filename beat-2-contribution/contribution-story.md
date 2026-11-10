@@ -8,9 +8,8 @@ format criteria grade exactly that. Your course repo link is the whole submissio
 files and no evidence uploads are part of Assignment 5.
 
 **Contribution Number:** [1]
-**Student:** [Student name]
-**GitHub Username:** [your GitHub username, exactly as it appears on your profile - no @, no
-profile URL. Your comments upstream are identified by this name.]
+**Student:** Franklin Ekwe
+**GitHub Username:** franklinproject10
 **Issue:** [GitHub issue link]
 **Pull Request:** [GitHub PR link, once opened]
 
