@@ -55,7 +55,7 @@ happened; these entries are the toolkit's own timeline.
 All four entries are graded. Keep every heading below, and fill each
 one in the week it belongs to.
 
-**Unit 5: Built an issue scout for Python security work, fixed three rubric checks, and learned to screen for claims before grading
+**Unit 5: Built an issue scout for Python security work, fixed three rubric checks, and learned to screen for claims before grading**
 
 I turned my fit profile into three gh search issues queries and six free ranking rules, adding a good-first-issue filter after a pre-scan test showed bot spam and an 8,901-result keyword. My first $1 scan rejected an active repo because a commit lookup failed and accepted a report-only task, so I gave maintainer-commits a fallback, made scope-bounded require a PR-sized change, and made not-claimed count unacknowledged claims; a $0.40 regrade confirmed the first two. On the Issue Selection site, all five Python security candidates were already taken or fixed by open or merged PRs, so I wrote a check_issue shell function to screen claims and PRs for free before spending grading credit. That screen, plus a regrade under the fixed rubric, left openmed#5188 (a secret-detection fix) as my pick, pending instructor approval.
 
