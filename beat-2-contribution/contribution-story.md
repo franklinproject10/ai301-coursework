@@ -1,4 +1,4 @@
-# Contribution: [Issue Title]
+# Contribution: New rule LLM-16: model output deserialized with pickle or yaml.load
 
 Path: `beat-2-contribution/contribution-story.md`
 
@@ -7,10 +7,10 @@ the repository is not read. **Keep every section header below under its exact na
 format criteria grade exactly that. Your course repo link is the whole submission: no tool
 files and no evidence uploads are part of Assignment 5.
 
-**Contribution Number:** [1]
+**Contribution Number:** 1
 **Student:** Franklin Ekwe
 **GitHub Username:** franklinproject10
-**Issue:** [GitHub issue link]
+**Issue:** https://github.com/patsypppe/slopaudit/issues/30
 **Pull Request:** [GitHub PR link, once opened]
 
 One repository, built across units 5 to 8, telling the whole story of your real
@@ -54,9 +54,9 @@ happened; these entries are the toolkit's own timeline.
 All four entries are graded. Keep every heading below, and fill each
 one in the week it belongs to.
 
-**Unit 5: Built an issue scout for Python security work, fixed three rubric checks, and learned to screen for claims before grading**
+**Unit 5: Built an issue scout for Python security work and fixed three rubric checks it got wrong**
 
-I turned my fit profile into three gh search issues queries and six free ranking rules, adding a good-first-issue filter after a pre-scan test showed bot spam and an 8,901-result keyword. My first $1 scan rejected an active repo because a commit lookup failed and accepted a report-only task, so I gave maintainer-commits a fallback, made scope-bounded require a PR-sized change, and made not-claimed count unacknowledged claims; a $0.40 regrade confirmed the first two. On the Issue Selection site, all five Python security candidates were already taken or fixed by open or merged PRs, so I wrote a check_issue shell function to screen claims and PRs for free before spending grading credit. That screen, plus a regrade under the fixed rubric, left openmed#5188 (a secret-detection fix) as my pick, pending instructor approval.
+I turned my fit profile into three `gh search issues` queries and six free ranking rules. A pre-scan test showed bot spam and one keyword returning 8,901 results, so I added a good-first-issue filter before spending any credit. My first $1 scan rejected an active repo because a commit lookup failed, and it accepted a report-only task. I gave `maintainer-commits` a fallback and made `scope-bounded` require a PR-sized change; a $0.40 regrade confirmed both fixes. I also made `not-claimed` count unacknowledged claims, but that change is not yet exercised: no issue I graded since has had a live claim. When all five Python security candidates on the Issue Selection site turned out to be taken or already fixed, I wrote `tools/check_issue.sh` to screen claims and PRs for free before grading.
 
 **Unit 6: [one line on the tool work]**
 
@@ -78,24 +78,18 @@ drafted, what you did with the draft.]
 
 ## Why I Chose This Issue
 
-[1-2 paragraphs in your own words: how you searched, what your scan
-surfaced, what your scout's verdict said, why this issue fits your
-profile, and what you hope to learn. If your scout's verdict on it
-was reject and you chose it anyway, say so here and say why; choosing
-against your own tool silently is what loses points. Close with an
-honest read of the tool itself: where the scout fell short on a real
-wild search and what you changed or would change, or what convinced
-you it held up. **Record the link to your claim comment in this section too.**
-Not claimed yet? Write `claim pending` and today's date where the link goes,
-and add the link the moment your claim lands.]
+I searched from a fit profile focused on Python security tooling and AI safety. My scout ran three `gh search issues` queries (security scanner, secret detection, prompt injection), ranked the results by recent activity, and graded the top five against my rubric. Two of those first five verdicts were wrong, and I fixed both checks. My pick was meant to come from the Issue Selection site, but all five Python security issues it listed were unavailable on GitHub: two had open PRs, two were already fixed by merged PRs, and one had been inactive for ten months. I went back to my scout's accepts, screened them with `check_issue` (open, unassigned, no comments, no PRs), and regraded them under the fixed rubric. Both passed every required check. The scout ranked maziyarpanahi/openmed#5188 first and patsypppe/slopaudit#30 second, because #30 changes the taint engine. I waited a week for instructor approval before claiming, and in that week another contributor claimed openmed#5188, was assigned, and opened a PR. So I claimed slopaudit#30 the same day I found it still clear. It fits my profile directly: a security scanner rule that catches model output flowing into `pickle.loads` or `yaml.load`, a prompt-injection-to-code-execution path. I want to learn how a taint engine tracks untrusted data from source to sink, and how to write a rule precise enough to avoid false positives.
+
+My honest read of the scout: it held up on what it could see, but a real wild search showed me what it cannot see. It treated a failed lookup as evidence, passed a report-only task because every scope condition was a negative, and only counted claims a maintainer had acknowledged; I fixed all three. It also cannot see work in progress unless a PR links to the issue, so I added a free `check_issue` screen before grading. Two gaps remain unfixed: `scope-bounded` reads maintainer comments but not the issue body (the body of #30 asks for a change to `taint.py`, and the check did not notice), and the rubric does not model contributor rules like openmed's AGENTS.md ban on assistant names in PRs. The biggest lesson was not in the tool at all: my own scope.md says to claim upstream the moment you commit, and I lost my top pick by not doing it.
+
+Claim comment: https://github.com/patsypppe/slopaudit/issues/30#issuecomment-6997011872
 
 **Toolkit**
 
-- Tool: issue-scout (your scout: your search strategy, your rubric),
-  and how you used it
-- What it produced: [the scan and its verdict on this issue, described]
-- Difficulties: [where it fell short, or "none met" if none did]
-- What changed: [what you patched or would update, or "nothing"]
+- Tool: issue-scout (my search strategy, ranking rules and rubric), run as one full scan, one fix-verification grade and one grade of my two finalists, plus `tools/check_issue.sh` to screen each candidate for claims and PRs before grading.
+- What it produced: Scan 1 accepted 3 of 5 graded issues. After the rubric fixes, the finalist grade accepted openmed#5188 and slopaudit#30, ranking #30 second because it adds a Sink in `taint.py`, the data-flow tracker.
+- Difficulties: It rejected UKGovernmentBEIS/inspect_ai#5951 because a commit fetch failed, though `gh api` showed four human committers the day before. It accepted a report-only task and passed a contested issue. It cannot see in-progress work, and all five site candidates were taken or fixed. Its `scope-bounded` check passed #30 on the letter while missing that the issue body asks for a taint-engine change.
+- What changed: `maintainer-commits` now retries and falls back to merged PRs; `scope-bounded` requires a PR-sized change; `not-claimed` counts any claim inside the repo's lapse window (not yet exercised on a live claim). I added `tools/check_issue.sh` as a free pre-grade screen. Still to update: make `scope-bounded` read the issue body, and add a check for contributor rules such as AI-attribution bans.
 
 ---
 
@@ -103,26 +97,29 @@ and add the link the moment your claim lands.]
 
 **Problem Description**
 
-[In your own words, what is broken or missing?]
+slopaudit has no rule for model output that reaches an unsafe deserializer. If an app asks an LLM for YAML and parses it with `yaml.load`, or decodes model-produced base64 and passes it to `pickle.loads`, a prompt injection can make the model emit a payload that executes code when it is deserialized (CWE-502). The scanner already tracks model output into `eval`-style sinks, but this deserialization path is missing.
 
 **Expected Behavior**
 
-[What should happen?]
+A new experimental rule, LLM-16, flags model output that flows into `pickle.loads`, `marshal.loads`, or `yaml.load` / `yaml.load_all` without a safe loader, at critical severity and confidence with CWE-502. Safe patterns, such as `yaml.safe_load` or deserializing data that never came from a model, must not be flagged.
 
 **Current Behavior**
 
-[What actually happens?]
+According to the issue, slopaudit reports nothing for `pickle.loads(<model output>)` or for the `yaml.load` equivalent. I will confirm this in Reproduction by running the scanner on a small sample file before changing any code.
 
 **Affected Components**
 
-[Which parts of the codebase are involved?]
+- `src/slopaudit/taint.py`: a new `Sink` defined next to `CODE_SINK` for the unsafe deserializers.
+- `src/slopaudit/rules/llm_flow.py`: a new rule class modeled on `ModelOutputToEval`.
+- Tests for the rule (positive and negative cases) and labelled samples in `benchmarks/corpus/`.
+- Generated rule docs (`make docs`), plus `make check` and `benchmarks/realworld.py --no-network` for verification.
 
 **Toolkit**
 
-- Tool:
-- What it produced:
-- Difficulties:
-- What changed:
+- Tool: `gh issue view` and the issue page to read the spec, and Claude (an AI assistant) to summarize it into these four fields, which I checked against the issue text.
+- What it produced: The four fields above, mapping the problem to two source files, a test set, a corpus set and three verification commands.
+- Difficulties: The issue includes no code examples, so the exact source-to-sink shape the rule must catch is not yet pinned down; "safe loader" is also not defined (for example, whether `yaml.FullLoader` counts).
+- What changed: I will pin down both during reproduction by writing a minimal sample that should trigger the rule and one that should not, and by asking the maintainer if the loader question stays unclear.
 
 ---
 
